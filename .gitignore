@@ -1,5 +1,7 @@
 # Ignore all .log files
 *.log
+.env
+uv.lock
 
 # Ignore all files in any directory named temp
 temp/
@@ -7,4 +9,4 @@ fastapi-the-complete-course/
 __pycache__/
 fastapi_env/
 .venv/
-.env
+

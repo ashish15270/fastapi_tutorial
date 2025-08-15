@@ -1,10 +1,25 @@
 [project]
 name = "fastapienv"
 version = "0.1.0"
-description = "Add your description here"
+description = "taken from https://github.com/codingwithroby/fastapi-the-complete-course.git"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi",
-    "uvicorn[standard]"
+    "uvicorn[standard]",
+    "bcrypt==4.0.1",
+    "cryptography",
+    "fastapi",
+    "psycopg2-binary",
+    "PyMySQL",
+    "python-jose",
+    "python-multipart",
+    "SQLAlchemy",
+    "uvicorn",
+    "passlib",
+    "pytest",
+    "httpx",
+    "pytest-asyncio",
+    "aiofiles",
+    "jinja2"
 ]
