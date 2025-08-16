@@ -66,6 +66,12 @@ def get_book_by_rating(book_rating: int):
             book_to_return.append(book)
     return book_to_return
 
+@app.get("/books/published/")
+def get_book_by_year(published: int):
+    for book in BOOKS:
+        if book.published == published:
+            return book
+
 @app.put("/books/update-book")
 def update_book(update_book: BookRequest):
     for book in BOOKS:
@@ -90,11 +96,6 @@ def delete_a_book(book_id: int):
             BOOKS.pop(book_id-1)
     return BOOKS
 
-@app.get("/books/")
-def get_book_by_year(published: int):
-    for book in BOOKS:
-        if book.published == published:
-            return book
 
 def create_book_id(book:Book):
     if len(BOOKS)>=0:
