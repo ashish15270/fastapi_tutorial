@@ -60,7 +60,7 @@ def create_book(new_book: BookRequest):
     BOOKS.append(find_book_id(new_book))
     return BOOKS
 
-@app.get("/get_book")
+@app.get("/get_book{book_id}")
 def fetch_book(book_id: int):
     return BOOKS[book_id-1]
 
