@@ -1,5 +1,5 @@
 from operator import gt
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, HTTPException, Path, Query
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -58,16 +58,17 @@ BOOKS = [
 def read_all_books():
     return BOOKS
 
-@app.get("/books/{book_rating}")
-def get_book_by_rating(book_rating: int):
+@app.get("/books/}")
+def get_book_by_rating(book_rating: int = Query(gt=0,lt=6)):
+    book_to_return=[]
     for book in BOOKS:
-        book_to_return=[]
         if book.rating==book_rating:
             book_to_return.append(book)
     return book_to_return
 
 @app.get("/books/published/")
-def get_book_by_year(published: int):
+def get_book_by_year(published: int = Query(gt=1600)):
+
     for book in BOOKS:
         if book.published == published:
             return book
@@ -85,12 +86,15 @@ def create_book(new_book: BookRequest):
     BOOKS.append(create_book_id(new_book))
     return BOOKS
 
-@app.get("/get_book{book_id}")
-def fetch_book(book_id: int):
-    return BOOKS[book_id-1]
+@app.get("/get_book/{book_id}")
+def fetch_book(book_id: int = Path(gt=0)):
+    try:
+        return BOOKS[book_id-1]
+    except:
+        raise HTTPException(status_code=404,detail="Error: Book not Found")
 
 @app.delete("/books/{book_id}")
-def delete_a_book(book_id: int):
+def delete_a_book(book_id: int = Path(gt=0)):
     for book in BOOKS:
         if book.id == book_id:
             BOOKS.pop(book_id-1)
