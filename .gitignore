@@ -8,3 +8,4 @@ __pycache__/
 fastapi_env/
 .venv/
 .env
+*.db

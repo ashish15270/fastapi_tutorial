@@ -14,5 +14,9 @@ dependencies = [
     "python-multipart",
     "python-jose[cryptography]",
     "pymysql",
-    "alembic"
+    "alembic",
+    "aiofiles",
+    "jinja2",
+    "httpx",
+    "pytest"
 ]

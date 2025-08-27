@@ -5,8 +5,8 @@ from sqlalchemy.engine import create
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import roles
 from sqlalchemy.util import deprecated
-from database import SessionLocal
-from models import Users
+from ..database import SessionLocal
+from ..models import Users
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 from passlib.context import CryptContext
