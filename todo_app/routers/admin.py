@@ -6,6 +6,7 @@ from starlette.status import HTTP_204_NO_CONTENT, HTTP_401_UNAUTHORIZED, HTTP_40
 from models import Todos
 from database import SessionLocal, engine
 from .auth import get_current_user
+from models import Users
 
 router=APIRouter(
     prefix='/admin',
@@ -36,3 +37,12 @@ def read_all(user: user_dependency, db: db_dependency):
 def delete_todos(user: user_dependency, db: db_dependency,todo_id):
     db.query(Todos).filter(Todos.id==todo_id).delete()
     db.commit()
+
+@router.get('/users/', status_code=status.HTTP_200_OK)
+def get_all_users(user: user_dependency, db: db_dependency, user_id):
+    user = db.query(Users).filter(Users.id==user_id).first()
+    if user.role!='admin':
+        return HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Unauthorized User')
+    user_info=db.query(Users).filter(Users.id==user_id).first()
+    return user_info
