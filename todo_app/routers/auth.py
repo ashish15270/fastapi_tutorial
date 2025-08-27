@@ -31,7 +31,8 @@ class CreateUserRequest(BaseModel):
     last_name: str
     password: str
     role: str
-    is_active:bool
+    is_active: bool
+    phone_number: str
 
 def get_db():
     db=SessionLocal()
@@ -60,6 +61,7 @@ class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 def get_current_user(token: auth_bearer_dependency):
     try:
         payload=jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -83,7 +85,8 @@ def create_user(db: db_dependency,create_user_request: CreateUserRequest):
         last_name=create_user_request.last_name,
         role=create_user_request.role,
         hashed_password=bcrypt_context.hash(create_user_request.password),
-        is_active=create_user_request.is_active
+        is_active=create_user_request.is_active,
+        phone_number=create_user_request.phone_number
     )
     db.add(create_user_model)
     db.commit()
@@ -96,3 +99,4 @@ def login_for_access_token(form_data: auth_dependency,db: db_dependency):
             detail='Unauthorized User')
     token=create_access_token(user.username, user.id, user.role,timedelta(minutes=20))
     return {'access_token':token, 'token_type': 'bearer'}
+
