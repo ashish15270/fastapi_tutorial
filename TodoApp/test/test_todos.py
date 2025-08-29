@@ -93,3 +93,15 @@ def test_read_one_authenticated_not_found():
     response=client.get('/todo/999')
     assert response.status_code==status.HTTP_404_NOT_FOUND
     assert response.json()=={'detail':'todo not found'}
+
+def test_create_new_todo():
+    request_data={
+        'title':'Learn FastAPI',
+        'description':'its fun',
+        'complete':False,
+        'priority':1,
+        'owner_id':1,
+        'id':1
+        }
+    response=client.get('/create_todo/',request_data)
+    assert response.status_code==status.HTTP_201_CREATED
