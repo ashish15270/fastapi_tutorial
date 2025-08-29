@@ -30,7 +30,7 @@ def read_all(user:user_dependency,db: db_dependency):
         raise HTTPException(401, detail='USer Not Authenticated')
     return db.query(Todos).filter(Todos.owner_id==user.get('id')).all()
 
-@router.get("/{todo_id}", status_code=status.HTTP_200_OK)
+@router.get("/todo/{todo_id}", status_code=status.HTTP_200_OK)
 def get_todo_by_id(user: user_dependency,db: db_dependency, todo_id:int=Path(gt=0)):
     if user is None:
         raise HTTPException(401, detail='USer Not Authenticated')
