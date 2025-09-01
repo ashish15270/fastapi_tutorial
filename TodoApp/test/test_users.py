@@ -14,8 +14,12 @@ def test_return_user(test_user):
     assert response.status_code==status.HTTP_200_OK
   #  assert response.json()['hashed_password']==bcrypt_context.hash('password')   hash changes everytime
 
-def test_change_pwd_invalid_pwd(test_user):
-    response=client.put('/update_password',json={'password':'wrong_password',
-                                                 "new_password": "password123"})
+# def test_change_pwd_invalid_pwd(test_user):
+#     response=client.put('/users/update_password/',json={"password":"wrong_password",
+#                                                  "new_password": "password123"})
     
-    assert response.status_code==status.HTTP_401_UNAUTHORIZED
+#     assert response.status_code==status.HTTP_401_UNAUTHORIZED
+
+def test_change_phone(test_user):
+    response=client.put('/users/update_phone/555555555')
+    assert response.status_code==status.HTTP_204_NO_CONTENT

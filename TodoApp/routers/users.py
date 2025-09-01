@@ -48,7 +48,7 @@ def update_password(user: user_dependency, db: db_dependency,verify_password: Ve
     user.hashed_password=bcrypt_context.hash(verify_password.new_password)
     return HTTP_204_NO_CONTENT
 
-@router.put('/update_phone',status_code=status.HTTP_204_NO_CONTENT)
+@router.put('/update_phone/{phone_number}',status_code=status.HTTP_204_NO_CONTENT)
 def update_phone_number(user: user_dependency, db: db_dependency, phone_number: str):
     if user is None:
         raise HTTPException(status_code=401, detail='Authentication Failed')

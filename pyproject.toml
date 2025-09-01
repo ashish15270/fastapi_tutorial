@@ -18,5 +18,6 @@ dependencies = [
     "aiofiles",
     "jinja2",
     "httpx",
-    "pytest"
+    "pytest",
+    "pytest-asyncio"
 ]

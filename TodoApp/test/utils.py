@@ -23,7 +23,7 @@ Base.metadata.create_all(bind=engine)
 def override_get_db():
     db=TestingSessionLocal()
     try:
-        yield db
+        return db
     finally:
         db.close()
 
@@ -45,7 +45,8 @@ def test_todo():
             owner_id=1
         )
         
-        db = TestingSessionLocal()
+      #  db = TestingSessionLocal()
+        db=override_get_db()
         db.add(todo)
         db.commit()
         yield todo

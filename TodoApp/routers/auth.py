@@ -62,7 +62,7 @@ class Token(BaseModel):
     token_type: str
 
 
-def get_current_user(token: auth_bearer_dependency):
+async def get_current_user(token: auth_bearer_dependency):
     try:
         payload=jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str=payload.get('sub')
