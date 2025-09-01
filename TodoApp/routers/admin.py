@@ -2,7 +2,6 @@ from typing import Annotated
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends,  HTTPException, Path, status
-from starlette.status import HTTP_204_NO_CONTENT, HTTP_401_UNAUTHORIZED, HTTP_404_NOT_FOUND
 from ..models import Todos
 from ..database import SessionLocal, engine
 from .auth import get_current_user
@@ -33,10 +32,15 @@ def read_all(user: user_dependency, db: db_dependency):
         raise HTTPException(status_code=401, detail='Unauthenticated_user')
     return db.query(Todos).all()
 
-@router.delete('/delete/', status_code=HTTP_204_NO_CONTENT)
+@router.delete('/delete/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
 def delete_todos(user: user_dependency, db: db_dependency,todo_id):
+    model=db.query(Todos).filter(Todos.id==todo_id).first()
+    if model is None:
+        raise HTTPException(status_code=404, detail='todo not found')
     db.query(Todos).filter(Todos.id==todo_id).delete()
     db.commit()
+    
+        
 
 @router.get('/users/', status_code=status.HTTP_200_OK)
 def get_all_users(user: user_dependency, db: db_dependency, user_id):

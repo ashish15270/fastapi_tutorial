@@ -5,9 +5,10 @@ from sqlalchemy.pool import StaticPool
 from sqlalchemy.orm import sessionmaker
 from ..database import Base
 from ..main import app
-from ..models import Todos
+from ..models import Todos, Users
 from fastapi.testclient import TestClient
 import pytest
+from passlib.context import CryptContext
 
 sql_alchemy_url=os.getenv('SQLALCHEMY_DATABASE_URL')
 
@@ -29,6 +30,7 @@ def override_get_db():
 def override_get_current_user():
     return {'username':'ashish', 'id':1, 'user_role': 'admin'}
 
+bcrypt_context=CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 client=TestClient(app)
 
@@ -51,3 +53,23 @@ def test_todo():
         with engine.connect() as connection:
             connection.execute(text("DELETE FROM todos;"))
             connection.commit()
+
+@pytest.fixture
+def test_user():
+    user=Users(
+    email='test_email',
+    username='ashish',
+    first_name='ashish',
+    last_name='thegreat',
+    hashed_password=bcrypt_context.hash('password'),
+    role='admin',
+    phone_number='Column(String, unique=True)'
+    )
+
+    db=TestingSessionLocal()
+    db.add(user)
+    db.commit()
+    yield user
+    with engine.connect() as conn:
+        conn.execute(text('Delete from Users'))
+        conn.commit()
