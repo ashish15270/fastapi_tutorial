@@ -21,7 +21,7 @@ def test_read_all_authenticated(test_todo):
     }]
 
 def test_read_all_authenticated(test_todo):
-    response=client.get('/')
+    response=client.get('/todos')
     assert response.status_code==status.HTTP_200_OK
     assert response.json()==[{
         'title':'Learn FastAPI',
@@ -33,7 +33,7 @@ def test_read_all_authenticated(test_todo):
     }]
 
 def test_read_one_authenticated(test_todo):
-    response=client.get('/todo/1')
+    response=client.get('/todos/todo/1')
     assert response.status_code==status.HTTP_200_OK
     assert response.json()=={'title':'Learn FastAPI',
         'description':'its fun',
@@ -44,7 +44,7 @@ def test_read_one_authenticated(test_todo):
     }
 
 def test_read_one_authenticated_not_found():
-    response=client.get('/todo/999')
+    response=client.get('/todos/todo/999')
     assert response.status_code==status.HTTP_404_NOT_FOUND
     assert response.json()=={'detail':'todo not found'}
 
@@ -55,7 +55,7 @@ def test_create_new_todo(test_todo):
         'complete':False,
         'priority':1
         }
-    response=client.post('/create_todo/',json=request_data)
+    response=client.post('/todos/create_todo/',json=request_data)
     assert response.status_code==status.HTTP_201_CREATED
 
 def test_update_todo(test_todo):
@@ -65,7 +65,7 @@ def test_update_todo(test_todo):
         'complete':False,
         'priority':5
     }
-    response=client.put('/update_a_todo/1',json=request_data)
+    response=client.put('/todos/update_a_todo/1',json=request_data)
     assert response.status_code==status.HTTP_204_NO_CONTENT
 
     db=TestingSessionLocal()
@@ -74,7 +74,7 @@ def test_update_todo(test_todo):
     assert model.title=='Learn agentic AI'
 
 def test_delete_tod(test_todo):
-    response=client.delete('/todos/delete/1')
+    response=client.delete('/todos/todos/delete/1')
     assert response.status_code==status.HTTP_204_NO_CONTENT
 
     db=TestingSessionLocal()

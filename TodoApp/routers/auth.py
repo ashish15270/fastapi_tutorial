@@ -7,11 +7,12 @@ from sqlalchemy.sql import roles
 from sqlalchemy.util import deprecated
 from ..database import SessionLocal
 from ..models import Users
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from pydantic import BaseModel
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from jose import JWTError, jwt
+from fastapi.templating import Jinja2Templates
 
 router=APIRouter(
     prefix='/auth',
@@ -44,6 +45,22 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 auth_dependency=Annotated[OAuth2PasswordRequestForm, Depends()]
 auth_bearer_dependency=Annotated[str, Depends(oauth_bearer)]
+
+templates=Jinja2Templates(directory="TodoApp/templates")
+
+### pages ###
+
+
+@router.get("/login-page")
+def render_login_page(request: Request):
+    return templates.TemplateResponse("login.html", {"request": request})
+
+@router.get("/register-page")
+def render_register_page(request: Request):
+    return templates.TemplateResponse("register.html", {"request": request})
+
+
+### Endpoint ###
 
 def authenticate_user(username: str, pwd: str, db):
     user=db.query(Users).filter(Users.username==username).first()

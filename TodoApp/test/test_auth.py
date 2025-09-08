@@ -1,6 +1,6 @@
 from .utils import *
 from ..routers.auth import get_db, authenticate_user, create_access_token, ALGORITHM, SECRET_KEY, get_current_user
-from fastapi import status
+from fastapi import status, HTTPException
 from jose import JWTError, jwt
 import datetime
 from datetime import timezone, timedelta
@@ -36,3 +36,14 @@ async def test_get_current_user_valid_token():
 
     user=await get_current_user(token=token)
     assert user=={'username':'ashish','id':1,'user_role':'admin'}
+
+@pytest.mark.asyncio
+async def test_get_current_user_missing_payload():
+    encode={'role':'user'}
+    token=jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
+
+    with pytest.raises(HTTPException) as exception_info:
+        await get_current_user(token=token)
+
+    assert exception_info.value.status_code==401
+    assert exception_info.value.detail=='Unauthorized User'
